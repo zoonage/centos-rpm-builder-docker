@@ -4,7 +4,7 @@ set -e
 set -x
 
 SPEC=$1
-
+chown -R "$(id -u):$(id -g)" /rpmbuild/
 yum-builddep -y ${SPEC}
 spectool -g -R ${SPEC}
 rpmbuild -ba ${SPEC}
