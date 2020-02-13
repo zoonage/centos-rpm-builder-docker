@@ -6,10 +6,14 @@ build_centos7:
 	docker build --pull --force-rm \
 		--tag lest/centos7-rpm-builder \
 		--file Dockerfile.centos7 .
+build_centos8:
+	docker build --pull --force-rm \
+		--tag lest/centos8-rpm-builder \
+		--file Dockerfile.centos8 .
 
-build: build_centos6 build_centos7
+build: build_centos6 build_centos7 build_centos8
 
-test: build	test_centos7 test_centos6 
+test: build	test_centos8 test_centos7 test_centos6
 
 test_centos6:
 	docker run --rm \
@@ -23,6 +27,12 @@ test_centos7:
 		-v ${PWD}/tests/:/rpmbuild/SOURCES/ \
 		-v ${PWD}/_dist_c7:/rpmbuild/ \
 		lest/centos7-rpm-builder build-spec /rpmbuild/SOURCES/test1.spec
+
+test_centos8:
+	docker run --rm \
+		-v ${PWD}/tests/:/rpmbuild/SOURCES/ \
+		-v ${PWD}/_dist_c8:/rpmbuild/ \
+		lest/centos8-rpm-builder build-spec /rpmbuild/SOURCES/test1.spec
 
 clean:
 	rm -rf _dist
